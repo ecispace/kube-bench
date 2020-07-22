@@ -1,0 +1,44 @@
+---
+controls:
+version: "gke-1.0"
+id: 2
+text: "Etcd Node Configuration"
+type: "etcd"
+groups:
+  - id: 2
+    text: "Etcd Node Configuration Files"
+    checks:
+      - id: 2.1
+        text: "确保将--cert-file和--key-file参数设置为适当的值 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 2.2
+        text: "确保将--client-cert-auth参数设置为true (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 2.3
+        text: "确保--auto-tls参数未设置为true (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 2.4
+        text: "确保正确设置--peer-cert-file和--peer-key-file参数 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 2.5
+        text: "确保将--peer-client-cert-auth参数设置为true (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 2.6
+        text: "确保--peer-auto-tls参数未设置为true (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 2.7
+        text: "确保将唯一的证书颁发机构用于etcd (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false

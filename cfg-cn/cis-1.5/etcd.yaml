@@ -1,0 +1,121 @@
+---
+controls:
+version: 1.15
+id: 2
+text: "Etcd Node Configuration"
+type: "etcd"
+groups:
+  - id: 2
+    text: "Etcd Node Configuration Files"
+    checks:
+      - id: 2.1
+        text: "确保将--cert-file和--key-file参数设置为适当的值 (计入分数)"
+        audit: "/bin/ps -ef | /bin/grep $etcdbin | /bin/grep -v grep"
+        tests:
+          bin_op: and
+          test_items:
+            - flag: "--cert-file"
+              set: true
+            - flag: "--key-file"
+              set: true
+        remediation: |
+          Follow the etcd service documentation and configure TLS encryption.
+          Then, edit the etcd pod specification file /etc/kubernetes/manifests/etcd.yaml
+          on the master node and set the below parameters.
+          --cert-file=</path/to/ca-file>
+          --key-file=</path/to/key-file>
+        scored: true
+
+      - id: 2.2
+        text: "确保将--client-cert-auth参数设置为true (计入分数)"
+        audit: "/bin/ps -ef | /bin/grep $etcdbin | /bin/grep -v grep"
+        tests:
+          test_items:
+            - flag: "--client-cert-auth"
+              compare:
+                op: eq
+                value: true
+              set: true
+        remediation: |
+          在主节点上编辑etcd Pod配置文件$etcdconf ，设置以下参数
+          --client-cert-auth="true"
+        scored: true
+
+      - id: 2.3
+        text: "确保--auto-tls参数未设置为true (计入分数)"
+        audit: "/bin/ps -ef | /bin/grep $etcdbin | /bin/grep -v grep"
+        tests:
+          bin_op: or
+          test_items:
+            - flag: "--auto-tls"
+              set: false
+            - flag: "--auto-tls"
+              compare:
+                op: eq
+                value: false
+        remediation: |
+          在主节点上编辑etcd Pod配置文件$etcdconf ，删除 --auto-tls 参数或将其设置为 false。
+            --auto-tls=false
+        scored: true
+
+      - id: 2.4
+        text: "确保正确设置--peer-cert-file和--peer-key-file参数 (计入分数)"
+        audit: "/bin/ps -ef | /bin/grep $etcdbin | /bin/grep -v grep"
+        tests:
+          bin_op: and
+          test_items:
+            - flag: "--peer-cert-file"
+              set: true
+            - flag: "--peer-key-file"
+              set: true
+        remediation: |
+          按照etcd服务文档根据您的etcd群集配置对等TLS加密。然后，在主节点上编辑etcd Pod配置文件$etcdconf ，设置以下参数
+          --peer-client-file=</path/to/peer-cert-file>
+          --peer-key-file=</path/to/peer-key-file>
+        scored: true
+
+      - id: 2.5
+        text: "确保将--peer-client-cert-auth参数设置为true (计入分数)"
+        audit: "/bin/ps -ef | /bin/grep $etcdbin | /bin/grep -v grep"
+        tests:
+          test_items:
+            - flag: "--peer-client-cert-auth"
+              compare:
+                op: eq
+                value: true
+              set: true
+        remediation: |
+          在主节点上编辑etcd Pod配置文件$etcdconf ，设置以下参数
+          --peer-client-cert-auth=true
+        scored: true
+
+      - id: 2.6
+        text: "确保--peer-auto-tls参数未设置为true (计入分数)"
+        audit: "/bin/ps -ef | /bin/grep $etcdbin | /bin/grep -v grep"
+        tests:
+          bin_op: or
+          test_items:
+            - flag: "--peer-auto-tls"
+              set: false
+            - flag: "--peer-auto-tls"
+              compare:
+                op: eq
+                value: false
+              set: true
+        remediation: |
+          在主节点上编辑etcd Pod配置文件$etcdconf ，删除 --peer-auto-tls 参数或将其设置为 false。
+          --peer-auto-tls=false
+        scored: true
+
+      - id: 2.7
+        text: "确保将唯一的证书颁发机构用于etcd (不计分数)"
+        audit: "/bin/ps -ef | /bin/grep $etcdbin | /bin/grep -v grep"
+        tests:
+          test_items:
+            - flag: "--trusted-ca-file"
+              set: true
+        remediation: |
+          [手动测试]
+          按照etcd文档为etcd服务创建专用的证书颁发机构设置。 然后，在主节点上编辑etcd Pod配置文件$etcdconf ，设置以下参数
+          --trusted-ca-file=</path/to/ca-file>
+        scored: false

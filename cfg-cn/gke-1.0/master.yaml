@@ -1,0 +1,348 @@
+---
+controls:
+version: "gke-1.0"
+id: 1
+text: "Control Plane Components"
+type: "master"
+groups:
+  - id: 1.1
+    text: "Master Node Configuration Files "
+    checks:
+      - id: 1.1.1
+        text: "确保将API server Pod配置文件权限设置为644或更严格 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.2
+        text: "Ensure that the API server pod specification file ownership is set to root:root (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.3
+        text: "Ensure that the controller manager pod specification file permissions are set to 644 or more restrictive (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.4
+        text: "Ensure that the controller manager pod specification file ownership is set to root:root (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.5
+        text: "Ensure that the scheduler pod specification file permissions are set to 644 or more restrictive (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.6
+        text: "Ensure that the scheduler pod specification file ownership is set to root:root (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.7
+        text: "Ensure that the etcd pod specification file permissions are set to 644 or more restrictive (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.8
+        text: "Ensure that the etcd pod specification file ownership is set to root:root (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.9
+        text: "Ensure that the Container Network Interface file permissions are set to 644 or more restrictive (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.10
+        text: "Ensure that the Container Network Interface file ownership is set to root:root (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.11
+        text: "确保将etcd data文件夹权限设置为700或更严格 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.12
+        text: "确保将etcd data文件夹所有权设置为etcd:etcd (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.13
+        text: "Ensure that the admin.conf file permissions are set to 644 or more restrictive (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.14
+        text: "确保将admin.conf文件所有权设置为root:root (不计分数) "
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.15
+        text: "Ensure that the scheduler.conf file permissions are set to 644 or more restrictive (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: true
+
+      - id: 1.1.16
+        text: "确保将scheduler.conf文件所有权设置为root:root (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.17
+        text: "Ensure that the controller-manager.conf file permissions are set to 644 or more restrictive (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.18
+        text: "确保将controller-manager.conf文件所有权设置为root:root (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.19
+        text: "Ensure that the Kubernetes PKI directory and file ownership is set to root:root (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.20
+        text: "Ensure that the Kubernetes PKI certificate file permissions are set to 644 or more restrictive (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.1.21
+        text: "Ensure that the Kubernetes PKI key file permissions are set to 600 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+  - id: 1.2
+    text: "API服务器"
+    checks:
+      - id: 1.2.1
+        text: "确保将--anonymous-auth参数设置为false (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.2
+        text: "确保未设置--basic-auth-file参数 (不计分数)"
+        remediation: |
+          Although the use of the --basic-auth-file argument cannot be audited on GKE, you can
+          remediate the use of basic authentication. See Recommendation 6.8.1.
+        scored: false
+
+      - id: 1.2.3
+        text: "确保未设置--token-auth-file参数 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.4
+        text: "确保将--kubelet-https参数设置为true (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.5
+        text: "确保--kubelet-client-certificate和--kubelet-client- key参数设置为适当的值 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.6
+        text: "确保--kubelet-certificate-authority参数设置为适当的值 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.7
+        text: "确保--authorization-mode参数未设置为AlwaysAllow (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.8
+        text: "Ensure that the --authorization-mode argument includes Node (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.9
+        text: "确保--authorization-mode参数包含RBAC (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.10
+        text: "确保设置了许可控制插件EventRateLimit (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.11
+        text: "确保未设置许可控制插件AlwaysAdmit (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.12
+        text: "确保已设置许可控制插件AlwaysPullImages (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.13
+        text: "确保已设置许可控制插件SecurityContextDeny if PodSecurityPolicy is not used (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.14
+        text: "确保设置了许可控制插件ServiceAccount  (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.15
+        text: "确保设置了许可控制插件NamespaceLifecycle (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.16
+        text: "确保已设置许可控制插件PodSecurityPolicy (不计分数)"
+        remediation: |
+          To verify and remediate the use of Pod Security Policy on GKE, see Recommendation 6.10.3.
+        scored: false
+
+      - id: 1.2.17
+        text: "确保设置了许可控制插件NodeRestriction (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.18
+        text: "确保未设置--insecure-bind-address参数 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.19
+        text: "确保将--insecure-port参数设置为0 0 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.20
+        text: "确保将--secure-port参数未设置为0 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.21
+        text: "确保将--profiling参数设置为false (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.22
+        text: "Ensure that the --audit-log-path argument is set (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.23
+        text: "确保--audit-log-maxage参数设置为30或适当的值 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.24
+        text: "确保--audit-log-maxbackup参数设置为10或适当的值 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.25
+        text: "确保--audit-log-maxsize参数设置为100或适当的值 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.26
+        text: "确保--request-timeout参数设置为适当的值 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.27
+        text: "确保--service-account-lookup参数设置为true (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.28
+        text: "确保--service-account-key-file参数设置为适当的值 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.29
+        text: "Ensure that the --etcd-certfile and --etcd-keyfile arguments are set as appropriate (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.30
+        text: "确保正确设置--tls-cert-file和--tls-private-key-file参数 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.31
+        text: "确保将--client-ca-file参数设置为适当的值 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.32
+        text: "确保--etcd-cafile参数设置为适当的值 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.2.33
+        text: "Ensure that the --encryption-provider-config argument is set as appropriate (不计分数)"
+        remediation: |
+          To verify and remediate the use of secret encryption on GKE, see Recommendation 6.3.1.
+        scored: false
+
+      - id: 1.2.34
+        text: "Ensure that encryption providers are appropriately configured (不计分数)"
+        remediation: |
+          To verify and remediate the use of secret encryption on GKE, see Recommendation 6.3.1.
+        scored: false
+
+      - id: 1.2.35
+        text: "确保API服务器仅使用强加密密码 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+  - id: 1.3
+    text:  "控制器管理"
+    checks:
+      - id: 1.3.1
+        text: "确保将--terminated-pod-gc-threshold参数设置合适 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.3.2
+        text: "确保将--profiling参数设置为false (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.3.3
+        text: "确保将--use-service-account-credentials参数设置为true (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.3.4
+        text: "确保将--service-account-private-key-file参数设置为适当的值 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.3.5
+        text: "确保正确设置--root-ca-file参数 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.3.6
+        text: "确保将RotateKubeletServerCertificate参数设置为true (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.3.7
+        text: "Ensure that the --bind-address argument is set to 127.0.0.1 (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+  - id: 1.4
+    text: "调度程序"
+    checks:
+      - id: 1.4.1
+        text: "确保将--profiling参数设置为false (不计分数)"
+        remediation: "This control cannot be modified in GKE."
+        scored: false
+
+      - id: 1.4.2
+        text: "Ensure that the --bind-address argument is set to 127.0.0.1 (不计分数) "
+        remediation: "This control cannot be modified in GKE."
+        scored: false

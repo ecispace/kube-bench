@@ -1,0 +1,433 @@
+---
+controls:
+version: "1.11"
+id: "2"
+text: Worker Node Security Configuration
+type: "node"
+groups:
+  - id: "2.1"
+    text: Kubelet
+    checks:
+      - id: 2.1.1
+        text: 确保--allow-privilegedt参数设置为false (计入分数)
+        audit: "/bin/ps -fC $kubeletbin "
+        tests:
+          test_items:
+            - flag: --allow-privileged
+              set: true
+              compare:
+                op: eq
+                value: false
+        remediation: |
+          Edit the kubelet service file $kubeletsvc
+          on each worker node and set the below parameter in KUBELET_SYSTEM_PODS_ARGS variable.
+          --allow-privileged=false
+          Based on your system, restart the kubelet service. For example:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.2
+        text: 确保将--anonymous-auth参数设置为false (计入分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: --anonymous-auth
+              path: '{.authentication.anonymous.enabled}'
+              set: true
+              compare:
+                op: eq
+                value: false
+        remediation: |
+          如果使用Kubelet配置文件，请编辑该文件设置 authentication: anonymous: enabled 为 false。如果使用命令行参数，请在每个工作节点上编辑kubelet服务文件$kubeletsvc ，在 KUBELET_SYSTEM_PODS_ARGS 变量中设置以下参数 --anonymous-auth=false 根据您的系统，重新启动 kubelet 服务。例如:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.3
+        text: 确保--authorization-mode参数未设置为AlwaysAllow (计入分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: --authorization-mode
+              path: '{.authorization.mode}'
+              set: true
+              compare:
+                op: nothave
+                value: AlwaysAllow
+        remediation: |
+          如果使用Kubelet配置文件，请编辑该文件设置 authorization:mode 为 Webhook。如果使用命令行参数，请在每个工作节点上编辑kubelet服务文件$kubeletsvc ，在 KUBELET_AUTHZ_ARGS 变量中设置以下参数 --authorization-mode=Webhook 根据您的系统，重启 kubelet 服务。例如:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.4
+        text: 确保将--client-ca-file参数设置为适当的值 (计入分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: --client-ca-file
+              path: '{.authentication.x509.clientCAFile}'
+              set: true
+        remediation: |
+          如果使用Kubelet配置文件，请编辑该文件设置 authentication: x509: clientCAFile 为客户端CA文件的位置。如果使用命令行参数，请在每个工作节点上编辑kubelet服务文件$kubeletsvc ，在 KUBELET_AUTHZ_ARGS 变量中设置以下参数 --client-ca-file=<path/to/client-ca-file> 根据您的系统，重新启动 kubelet 服务。例如:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.5
+        text: 确保将--read-only-port参数设置为0 (计入分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: --read-only-port
+              path: '{.readOnlyPort}'
+              set: true
+              compare:
+                op: eq
+                value: 0
+        remediation: |
+          如果使用Kubelet配置文件，请编辑该文件设置 readOnlyPort 为 0。如果使用命令行参数，请在每个工作节点上编辑kubelet服务文件$kubeletsvc ，在 KUBELET_SYSTEM_PODS_ARGS 变量中设置以下参数 --read-only-port=0 根据您的系统，重新启动 kubelet 服务。例如:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.6
+        text: 确保--streaming-connection-idle-timeout参数未设置为0 (计入分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: --streaming-connection-idle-timeout
+              path: '{.streamingConnectionIdleTimeout}'
+              set: true
+              compare:
+                op: noteq
+                value: 0
+            - flag: --streaming-connection-idle-timeout
+              path: '{.streamingConnectionIdleTimeout}'
+              set: false
+          bin_op: or
+        remediation: |
+          如果使用Kubelet配置文件，请编辑该文件设置 streamingConnectionIdleTimeout 为除0以外的值.如果使用命令行参数，请在每个工作节点上编辑kubelet服务文件$kubeletsvc ，在 KUBELET_SYSTEM_PODS_ARGS 变量中设置以下参数 --streaming-connection-idle-timeout=5m 根据您的系统，重启 kubelet 服务。例如:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.7
+        text: 确保--protect-kernel-defaults参数设置为true (计入分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: --protect-kernel-defaults
+              path: '{.protectKernelDefaults}'
+              set: true
+              compare:
+                op: eq
+                value: true
+        remediation: |
+          如果使用Kubelet配置文件，请编辑该文件设置 protectKernelDefaults: true。如果使用命令行参数，请在每个工作节点上编辑kubelet服务文件$kubeletsvc ，在 KUBELET_SYSTEM_PODS_ARGS 变量中设置以下参数 --protect-kernel-defaults=true 根据您的系统，重新启动 kubelet 服务。例如:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.8
+        text: 确保--make-iptables-util-chains参数设置为true (计入分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: --make-iptables-util-chains
+              path: '{.makeIPTablesUtilChains}'
+              set: true
+              compare:
+                op: eq
+                value: true
+            - flag: --make-iptables-util-chains
+              path: '{.makeIPTablesUtilChains}'
+              set: false
+          bin_op: or
+        remediation: |
+          如果使用Kubelet配置文件，请编辑该文件设置 makeIPTablesUtilChains: true。如果使用命令行参数，请在每个工作节点上编辑kubelet服务文件$kubeletsvc ，从 KUBELET_CERTIFICATE_ARGS 变量中删除 --make-iptables-util-chains。 根据您的系统，重新启动 kubelet 服务。例如:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.9
+        text: 确保未设置--hostname-override参数 (计入分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: --hostname-override
+              path: '{.hostnameOverride}'
+              set: false
+        remediation: |
+          编辑kubelet服务文件$kubeletsvc 在每个工作节点上，从 KUBELET_CERTIFICATE_ARGS 变量中删除 —hostname-override。 根据您的系统，重新启动 kubelet 服务。例如:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.10
+        text: 确保将--event-qps参数设置为0 (计入分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: --event-qps
+              path: '{.eventRecordQPS}'
+              set: true
+              compare:
+                op: eq
+                value: 0
+        remediation: |
+          如果使用Kubelet配置文件，请编辑该文件设置 eventRecordQPS:0。如果使用命令行参数，请在每个工作节点上编辑kubelet服务文件$kubeletsvc ，在 KUBELET_SYSTEM_PODS_ARGS 变量中设置以下参数 --event-qps=0 根据您的系统，重新启动 kubelet 服务。例如:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.11
+        text: 确保正确设置--tls-cert-file和--tls-private-key-file参数 (计入分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: --tls-cert-file
+              path: '{.tlsCertFile}'
+              set: true
+            - flag: --tls-private-key-file
+              path: '{.tlsPrivateKeyFile}'
+              set: true
+          bin_op: and
+        remediation: |
+          如果使用Kubelet配置文件，请编辑该文件将tlsCertFile设置为用于标识此Kubelet的证书文件的位置，将tlsPrivateKeyFile设置为相应私钥文件的位置。如果使用命令行参数，请在每个工作节点上编辑kubelet服务文件$kubeletsvc ，在KUBELET_CERTIFICATE_ARGS变量中设置以下参数 --tls-cert-file=<path/to/tls-certificate-file> --tls-private-key-file=<path/to/tls-key-file> 根据您的系统，重新启动 kubelet 服务。例如:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.12
+        text: 确保--cadvisor-port参数设置为0 (计入分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: --cadvisor-port
+              path: '{.cadvisorPort}'
+              set: true
+              compare:
+                op: eq
+                value: 0
+            - flag: --cadvisor-port
+              path: '{.cadvisorPort}'
+              set: false
+          bin_op: or
+        remediation: |
+          编辑kubelet服务文件$kubeletsvc 在每个工作节点上，在 KUBELET_CADVISOR_ARGS 变量中设置以下参数 --cadvisor-port=0 根据您的系统，重新启动 kubelet 服务。例如:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.13
+        text: 确保--rotate-certificates参数未设置为false (计入分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: --rotate-certificates
+              path: '{.rotateCertificates}'
+              set: true
+              compare:
+                op: eq
+                value: true
+            - flag: --rotate-certificates
+              path: '{.rotateCertificates}'
+              set: false
+          bin_op: or
+        remediation: |
+          如果使用Kubelet配置文件，请编辑该文件以添加行 rotateCertificates:true。如果使用命令行参数，请在每个工作节点上编辑kubelet服务文件$kubeletsvc ，将 --rotate-certificates=true 参数添加到 KUBELET_CERTIFICATE_ARGS 变量中。 根据您的系统，重新启动 kubelet 服务。例如:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.14
+        text: 确保将RotateKubeletServerCertificate参数设置为true (计入分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: RotateKubeletServerCertificate
+              path: '{.featureGates.RotateKubeletServerCertificate}'
+              set: true
+              compare:
+                op: eq
+                value: true
+        remediation: |
+          编辑kubelet服务文件$kubeletsvc 在每个工作节点上，在 KUBELET_CERTIFICATE_ARGS 变量中设置以下参数 --feature-gates=RotateKubeletServerCertificate=true 根据您的系统，重新启动 kubelet 服务。例如:
+          systemctl daemon-reload
+          systemctl restart kubelet.service
+        scored: true
+
+      - id: 2.1.15
+        text: 确保Kubelet仅使用强加密密码 (不计分数)
+        audit: "/bin/ps -fC $kubeletbin"
+        audit_config: "/bin/cat $kubeletconf"
+        tests:
+          test_items:
+            - flag: --tls-cipher-suites
+              path: '{.tlsCipherSuites}'
+              set: true
+              compare:
+                op: valid_elements
+                value: TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256
+        remediation: |
+          如果使用Kubelet配置文件，编辑该文件设置 TLSCipherSuites 为: TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256
+          If using executable arguments, edit the kubelet service file $kubeletsvc on each worker node and set the below parameter.
+          --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256
+        scored: false
+
+  - id: "2.2"
+    text: 配置文件
+    checks:
+      - id: 2.2.1
+        text: 确保将kubelet service文件权限设置为644或更严格 (计入分数)
+        audit: '/bin/sh -c ''if test -e $kubeletkubeconfig; then stat -c permissions=%a $kubeletkubeconfig; fi'' '
+        tests:
+          test_items:
+            - flag: "permissions"
+              compare:
+                op: bitmask
+                value: "644"
+              set: true
+        remediation: |
+          在每个工作节点上运行以下命令（基于系统上的文件位置）。例如，
+          chmod 644 $kubeletkubeconfig
+        scored: true
+
+      - id: 2.2.2
+        text: 确保将kubelet.conf文件权限设置为644或更严格 (计入分数)
+        audit: '/bin/sh -c ''if test -e $kubeletkubeconfig; then stat -c %U:%G $kubeletkubeconfig; fi'' '
+        tests:
+          test_items:
+            - flag: root:root
+              set: true
+              compare:
+                op: eq
+                value: root:root
+        remediation: |
+          在每个工作节点上运行以下命令（基于系统上的文件位置）。例如，
+          chown root:root $kubeletkubeconfig
+        scored: true
+
+      - id: 2.2.3
+        text: 确保将kubelet.conf文件所有权设置为root:root (计入分数)
+        audit: '/bin/sh -c ''if test -e $kubeletsvc; then stat -c permissions=%a $kubeletsvc; fi'' '
+        tests:
+          test_items:
+            - flag: "permissions"
+              set: true
+              compare:
+                op: bitmask
+                value: "644"
+        remediation: |
+          在每个工作节点上运行以下命令（基于系统上的文件位置）。例如，
+          chmod 644 $kubeletsvc
+        scored: true
+
+      - id: 2.2.4
+        text: 确保将kubelet service文件所有权设置为root:root (计入分数)
+        audit: '/bin/sh -c ''if test -e $kubeletsvc; then stat -c %U:%G $kubeletsvc; fi'' '
+        tests:
+          test_items:
+            - flag: root:root
+              set: true
+        remediation: |
+          在每个工作节点上运行以下命令（基于系统上的文件位置）。例如，
+          chown root:root $kubeletsvc
+        scored: true
+
+      - id: 2.2.5
+        text: 确保将kubeconfig文件权限设置为644或更严格 (计入分数)
+        audit: '/bin/sh -c ''if test -e $proxykubeconfig; then stat -c permissions=%a $proxykubeconfig; fi'' '
+        tests:
+          test_items:
+            - flag: "permissions"
+              set: true
+              compare:
+                op: bitmask
+                value: "644"
+        remediation: |
+          在每个工作节点上运行以下命令（基于系统上的文件位置）。例如，
+          chmod 644 $proxykubeconfig
+        scored: true
+
+      - id: 2.2.6
+        text: 确保将kubeconfig文件所有权设置为root:root (计入分数)
+        audit: '/bin/sh -c ''if test -e $proxykubeconfig; then stat -c %U:%G $proxykubeconfig; fi'' '
+        tests:
+          test_items:
+            - flag: root:root
+              set: true
+        remediation: |
+          在每个工作节点上运行以下命令（基于系统上的文件位置）。例如，
+          chown root:root $proxykubeconfig
+        scored: true
+
+      - id: 2.2.7
+        text: 确保kubelet配置文件的权限设置为644或更严格 (计入分数)
+        type: manual
+        remediation: |
+          运行以下命令修改 --client-ca-file 文件的权限 chmod 644 <filename>
+          chmod 644 <filename>
+        scored: true
+
+      - id: 2.2.8
+        text: 确保将client certificate authorities文件所有权设置为root:root (计入分数)
+        audit: |
+          CAFILE=$(ps -ef | grep kubelet | grep -v apiserver | grep -- --client-ca-file= | awk -F '--client-ca-file=' '{print $2}' | awk '{print $1}')
+          if [[ -z $CAFILE ]]; then
+            CAFILE=$kubeletcafile
+          fi
+          if test -e $CAFILE; then stat -c %U:%G $CAFILE; fi
+        tests:
+          test_items:
+            - flag: root:root
+              set: true
+              compare:
+                op: eq
+                value: root:root
+        remediation: |
+          运行以下命令以修改 --client-ca-file 的所有权
+          chown root:root <filename>
+        scored: true
+
+      - id: 2.2.9
+        text: 确保kubelet配置文件的用户为root:root (计入分数)
+        audit: '/bin/sh -c ''if test -e $kubeletconf; then stat -c %U:%G $kubeletconf; fi'' '
+        tests:
+          test_items:
+            - flag: root:root
+              set: true
+        remediation: |
+          运行以下命令（使用在审计步骤中的配置文件位置）
+          chown root:root $kubeletconf
+        scored: true
+
+      - id: 2.2.10
+        text: 确保kubelet配置文件的权限设置为644或更严格 (计入分数)
+        audit: '/bin/sh -c ''if test -e $kubeletconf; then stat -c permissions=%a $kubeletconf; fi'' '
+        tests:
+          test_items:
+            - flag: "permissions"
+              set: true
+              compare:
+                op: bitmask
+                value: "644"
+        remediation: |
+          运行以下命令（使用在审计步骤中的配置文件位置）
+          chmod 644 $kubeletconf
+        scored: true
