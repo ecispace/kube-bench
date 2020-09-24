@@ -5,7 +5,9 @@ COPY main.go .
 COPY check/ check/
 COPY cmd/ cmd/
 ARG KUBEBENCH_VERSION
-RUN GO111MODULE=on CGO_ENABLED=0 go install -a -ldflags "-X github.com/aquasecurity/kube-bench/cmd.KubeBenchVersion=${KUBEBENCH_VERSION} -w"
+RUN go env -w GO111MODULE=on
+RUN go env -w GOPROXY=https://goproxy.cn,direct
+RUN CGO_ENABLED=0 go install -a -ldflags "-X github.com/aquasecurity/kube-bench/cmd.KubeBenchVersion=${KUBEBENCH_VERSION} -w"
 
 FROM alpine:3.11 AS run
 WORKDIR /opt/kube-bench/

@@ -83,7 +83,7 @@ func (t *testItem) execute(s string) *testOutput {
 		if t.Path != "" {
 			err := unmarshal(s, &jsonInterface)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "failed to load YAML or JSON from provided input \"%s\": %v\n", s, err)
+				//fmt.Fprintf(os.Stderr, "failed to load YAML or JSON from provided input \"%s\": %v\n", s, err)
 				return failTestItem("failed to load YAML or JSON")
 			}
 
