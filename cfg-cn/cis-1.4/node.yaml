@@ -2,7 +2,7 @@
 controls:
 version: "1.13"
 id: "2"
-text: Worker Node Security Configuration
+text: Worker Node  安全配置要求
 type: "node"
 groups:
   - id: "2.1"

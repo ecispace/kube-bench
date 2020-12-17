@@ -2,7 +2,7 @@
 controls:
 version: 1.13
 id: 1
-text: "Master Node安全配置要求"
+text: "Master Node 安全配置要求"
 type: "master"
 groups:
   - id: 1.1

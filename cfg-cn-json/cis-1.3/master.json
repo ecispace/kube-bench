@@ -1,0 +1,1617 @@
+{
+  "controls": null,
+  "version": 1.11,
+  "id": 1,
+  "text": "Master Node 安全配置要求",
+  "type": "master",
+  "isEnable": true,
+  "groups": [
+    {
+      "id": 1.1,
+      "text": "API服务器",
+      "checks": [
+        {
+          "id": "1.1.1",
+          "text": "确保将--anonymous-auth参数设置为false (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--anonymous-auth",
+                "compare": {
+                  "op": "eq",
+                  "value": false
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf，设置以下参数 --anonymous-auth=false\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.2",
+          "text": "确保未设置--basic-auth-file参数 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--basic-auth-file",
+                "set": false
+              }
+            ]
+          },
+          "remediation": "按照文档和配置备用机制进行身份验证。然后，在主节点上编辑API服务器Pod配置文件$apiserverconf ，删除 --basic-auth-file=<filename> 参数。\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.3",
+          "text": "确保未设置--insecure-allow-any-token参数 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--insecure-allow-any-token",
+                "set": false
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf，删除--insecure-allow-any-token参数。\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.4",
+          "text": "确保将--kubelet-https参数设置为true (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "bin_op": "or",
+            "test_items": [
+              {
+                "flag": "--kubelet-https",
+                "compare": {
+                  "op": "eq",
+                  "value": true
+                },
+                "set": true
+              },
+              {
+                "flag": "--kubelet-https",
+                "set": false
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf，删除 --kubelet-https 参数。\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.5",
+          "text": "确保未设置--insecure-bind-address参数 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--insecure-bind-address",
+                "set": false
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf，删除 --insecure-bind-address 参数。\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.6",
+          "text": "确保将--insecure-port参数设置为0 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--insecure-port",
+                "compare": {
+                  "op": "eq",
+                  "value": 0
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf，设置以下参数 --insecure-port=0\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.7",
+          "text": "确保将--secure-port参数未设置为0 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "bin_op": "or",
+            "test_items": [
+              {
+                "flag": "--secure-port",
+                "compare": {
+                  "op": "gt",
+                  "value": 0
+                },
+                "set": true
+              },
+              {
+                "flag": "--secure-port",
+                "set": false
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf，删除 --secure-port 参数或将其设置为其他（非零）端口。\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.8",
+          "text": "确保将--profiling参数设置为false (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--profiling",
+                "compare": {
+                  "op": "eq",
+                  "value": false
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf，设置以下参数 --profiling=false\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.9",
+          "text": "确保将--repair-malformed-updates参数设置为false (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--repair-malformed-updates",
+                "compare": {
+                  "op": "eq",
+                  "value": false
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf，设置以下参数 --repair-malformed-updates=false\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.10",
+          "text": "确保未设置许可控制插件AlwaysAdmit (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "bin_op": "or",
+            "test_items": [
+              {
+                "flag": "--enable-admission-plugins",
+                "compare": {
+                  "op": "nothave",
+                  "value": "AlwaysAdmit"
+                },
+                "set": true
+              },
+              {
+                "flag": "--enable-admission-plugins",
+                "set": false
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf，将 --enable-admission-plugins 参数设置为不包含 AlwaysAdmit 的值。\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.11",
+          "text": "确保已设置许可控制插件AlwaysPullImages (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--enable-admission-plugins",
+                "compare": {
+                  "op": "has",
+                  "value": "AlwaysPullImages"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf ，将 --enable-admission-plugins 参数设置为包含 AlwaysPullImages 的值。例如: --enable-admission-plugins=...，AlwaysPullImages，...\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.12",
+          "text": "确保设置了许可控制插件DenyEscalatingExec (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--enable-admission-plugins",
+                "compare": {
+                  "op": "has",
+                  "value": "DenyEscalatingExec"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf ，将 --enable-admission-plugins 参数设置为包含 DenyEscalatingExec 的值。—enable-admission-plugins=...，DenyEscalatingExec，...\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.13",
+          "text": "确保已设置许可控制插件SecurityContextDeny (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--enable-admission-plugins",
+                "compare": {
+                  "op": "has",
+                  "value": "SecurityContextDeny"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf ，将 --enable-admission-plugins 参数设置为包含 SecurityContextDeny 的值。 --enable-admission-plugins=...，SecurityContextDeny，...\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.14",
+          "text": "确保设置了许可控制插件NamespaceLifecycle (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "bin_op": "or",
+            "test_items": [
+              {
+                "flag": "--disable-admission-plugins",
+                "compare": {
+                  "op": "nothave",
+                  "value": "NamespaceLifecycle"
+                },
+                "set": true
+              },
+              {
+                "flag": "--disable-admission-plugins",
+                "set": false
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf ，设置 --disable-admission-plugins 参数以确保它不包含 NamespaceLifecycle。\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.15",
+          "text": "确保--audit-log-path参数已设置为适当的值 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--audit-log-path",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf ，将 --audit-log-path 参数设置为您希望审核日志的合适路径和文件例如:--audit-log-path=/var/log/apiserver/audit.log\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.16",
+          "text": "确保--audit-log-maxage参数设置为30或适当的值 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--audit-log-maxage",
+                "compare": {
+                  "op": "gte",
+                  "value": 30
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf ，将--audit-log-maxage 参数设置为30或适当的天数: --audit-log-maxage=30\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.17",
+          "text": "确保--audit-log-maxbackup参数设置为10或适当的值 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--audit-log-maxbackup",
+                "compare": {
+                  "op": "gte",
+                  "value": 10
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf ，将--audit-log-maxbackup 参数设置为10或适当的值。--audit-log-maxbackup=10\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.18",
+          "text": "确保--audit-log-maxsize参数设置为100或适当的值 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--audit-log-maxsize",
+                "compare": {
+                  "op": "gte",
+                  "value": 100
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf ，将 --audit-log-maxsize 参数设置为适当的大小（MB）。例如，要将其设置为100 MB:--audit-log-maxsize=100\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.19",
+          "text": "确保--authorization-mode参数未设置为AlwaysAllow (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--authorization-mode",
+                "compare": {
+                  "op": "nothave",
+                  "value": "AlwaysAllow"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf ，将--authorization-mode设置为AlwaysAllow参数以外的值。例如: --authorization-mode=Node, RBAC\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.20",
+          "text": "确保未设置--token-auth-file参数 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--token-auth-file",
+                "set": false
+              }
+            ]
+          },
+          "remediation": "Follow the documentation and configure alternate mechanisms for authentication. Then,\nedit the API server pod specification file $apiserverconf\non the master node and remove the --token-auth-file=<filename>\nparameter.\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.21",
+          "text": "确保--kubelet-certificate-authority参数设置为适当的值 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--kubelet-certificate-authority",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "按照Kubernetes文档设置apiserver和kubelet之间的TLS连接。然后，在主节点上编辑API服务器Pod配置文件$apiserverconf ,将 --kubelet-certificate-authority 参数设置为证书颁发机构的cert文件的路径。 --kubelet-certificate-authority=<ca-string>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.22",
+          "text": "确保--kubelet-client-certificate和--kubelet-client- key参数设置为适当的值 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "bin_op": "and",
+            "test_items": [
+              {
+                "flag": "--kubelet-client-certificate",
+                "set": true
+              },
+              {
+                "flag": "--kubelet-client-key",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "按照Kubernetes文档设置apiserver和kubelet之间的TLS连接。然后，在主节点上编辑API服务器Pod配置文件$apiserverconf ,设置kubelet客户端证书和关键参数，如下所示 --kubelet-client-certificate=<path/to/client-certificate-file> --kubelet-client-key=<path/to/client-key-file>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.23",
+          "text": "确保--service-account-lookup参数设置为true (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--service-account-lookup",
+                "compare": {
+                  "op": "eq",
+                  "value": true
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf，设置以下参数 --service-account-lookup=true\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.24",
+          "text": "确保已设置许可控制插件PodSecurityPolicy (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--enable-admission-plugins",
+                "compare": {
+                  "op": "has",
+                  "value": "PodSecurityPolicy"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "按照文档根据您的环境创建Pod安全策略对象。然后，在主节点上编辑API服务器Pod配置文件$apiserverconf ，将 --enable-admission-plugins 参数设置为包含PodSecurityPolicyenable的值: --admission-plugins=...，PodSecurityPolicy，... 然后重新启动API服务器。\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.25",
+          "text": "确保--service-account-key-file参数设置为适当的值 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--service-account-key-file",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf ，将--service-account-key-file参数设置为服务帐户的公钥文件：--service-account-key文件=<文件名>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.26",
+          "text": "确保--etcd-certfile和--etcd-keyfile参数设置为适当的值 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "bin_op": "and",
+            "test_items": [
+              {
+                "flag": "--etcd-certfile",
+                "set": true
+              },
+              {
+                "flag": "--etcd-keyfile",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "按照Kubernetes文档在apiserver和etcd之间设置TLS连接。然后，在主节点上编辑API服务器Pod配置文件$apiserverconf ，设置etcd证书和密钥文件参数。--etcd-certfile=<path/to/client-certificate-file> --etcd-keyfile=<path/to/client-key-file>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.27",
+          "text": "确保设置了许可控制插件ServiceAccount (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "bin_op": "or",
+            "test_items": [
+              {
+                "flag": "--enable-admission-plugins",
+                "compare": {
+                  "op": "has",
+                  "value": "ServiceAccount"
+                },
+                "set": true
+              },
+              {
+                "flag": "--enable-admission-plugins",
+                "set": false
+              }
+            ]
+          },
+          "remediation": "按照文档根据您的环境创建ServiceAccount对象。 然后，在主节点上编辑API服务器Pod配置文件$apiserverconf ，确保将--disable-admission-plugins参数设置为不包含ServiceAccount的值。\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.28",
+          "text": "确保根据需要设置--tls-cert-file和--tls-private-key-file参数 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "bin_op": "and",
+            "test_items": [
+              {
+                "flag": "--tls-cert-file",
+                "set": true
+              },
+              {
+                "flag": "--tls-private-key-file",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "按照Kubernetes文档在apiserver上设置TLS连接。然后，在主节点上编辑API服务器Pod配置文件$apiserverconf ，设置TLS证书和私钥文件参数。 --tls-cert-file=<path/to/tls-certificate-file> --tls-private-key-file=<path/to/tls-key-file>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.29",
+          "text": "确保将--client-ca-file参数设置为适当的值 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--client-ca-file",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "按照Kubernetes文档在apiserver上设置TLS连接。然后，在主节点上编辑API服务器Pod配置文件$apiserverconf ，设置客户端证书颁发机构文件。 --client-ca-file=<path/to/client-ca-file>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.30",
+          "text": "确保API服务器仅使用强加密密码 (不计分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--tls-cipher-suites",
+                "compare": {
+                  "op": "has",
+                  "value": "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf 设置以下参数 --tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM _SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM _SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM _SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.31",
+          "text": "确保--etcd-cafile参数设置为适当的值 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--etcd-cafile",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf ，将--authorization-mode参数设置为包含Node的值。--authorization-mode=Node,RBAC\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.32",
+          "text": "确保--authorization-mode参数包含Node (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--authorization-mode",
+                "compare": {
+                  "op": "has",
+                  "value": "Node"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf ，将--authorization-mode参数设置为包含Node的值。--authorization-mode=Node,RBAC\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.33",
+          "text": "确保设置了许可控制插件NodeRestriction (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--enable-admission-plugins",
+                "compare": {
+                  "op": "has",
+                  "value": "NodeRestriction"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "按照Kubernetes文档在kubelet上配置 NodeRestriction 插件。然后，在主节点上编辑API服务器Pod配置文件$apiserverconf ，将 --enable-admission-plugins 参数设置为包含 NodeRestriction 的值。 --enable-admission-plugins=...，NodeRestriction，...\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.34",
+          "text": "确保--experimental-encryption-provider-config参数设置为适当 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--experimental-encryption-provider-config",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "按照Kubernetes文档配置 EncryptionConfig 文件。然后，在主节点上编辑API服务器Pod配置文件$apiserverconf ，将 --experimental-encryption-provider-config 参数设置为该文件的路径:--experimental-encryption -provider-config=</path/to/EncryptionConfig/File>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.35",
+          "text": "确保将加密提供程序设置为aescbc (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照Kubernetes文档配置 EncryptionConfig 文件。在此文件中，选择 aescbc 作为加密提供程序。例如：\nkind: EncryptionConfig\napiVersion: v1\nresources:\n  - resources:\n    - secrets\n      providers:\n      - aescbc:\n          keys:\n          - name: key1\n            secret: <32-byte base64-encoded secret>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.36",
+          "text": "确保设置了许可控制插件EventRateLimit (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--enable-admission-plugins",
+                "compare": {
+                  "op": "has",
+                  "value": "EventRateLimit"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "按照Kubernetes文档在配置文件中设置所需的限制。然后，在主节点上编辑API服务器Pod配置文件$apiserverconf , 设置以下参数\n--enable-admission-plugins=...,EventRateLimit,...\n--admission-control-config-file=<path/to/configuration/file>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.37a",
+          "text": "确保AdvancedAuditing参数未设置为false (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "bin_op": "or",
+            "test_items": [
+              {
+                "flag": "--feature-gates",
+                "compare": {
+                  "op": "nothave",
+                  "value": "AdvancedAuditing=false"
+                },
+                "set": true
+              },
+              {
+                "flag": "--feature-gates",
+                "set": false
+              }
+            ]
+          },
+          "remediation": "按照Kubernetes文档在$apiserverconf 文件中设置所需的审核策略。然后，在主节点上编辑API服务器Pod配置文件$apiserverconf ,设置以下参数\n--audit-policy-file=/etc/kubernetes/audit-policy.yaml\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.37b",
+          "text": "确保AdvancedAuditing参数未设置为false (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "bin_op": "or",
+            "test_items": [
+              {
+                "flag": "--audit-policy-file",
+                "compare": {
+                  "op": "eq",
+                  "value": "/etc/kubernetes/audit-policy.yaml"
+                },
+                "set": true
+              },
+              {
+                "flag": "--audit-policy-file",
+                "compare": {
+                  "op": "eq",
+                  "value": "/etc/kubernetes/audit-policy.yml"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "按照Kubernetes文档在$apiserverconf 文件中设置所需的审核策略。然后，在主节点上编辑API服务器Pod配置文件$apiserverconf ,设置以下参数\n--audit-policy-file=/etc/kubernetes/audit-policy.yaml\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.38",
+          "text": "确保--request-timeout参数设置为适当的值 (计入分数)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "bin_op": "or",
+            "test_items": [
+              {
+                "flag": "--request-timeout",
+                "set": false
+              },
+              {
+                "flag": "--request-timeout",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf  根据需要设置以下参数 例如:\n--request-timeout=300s\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.1.39",
+          "text": "确保API服务器仅使用强加密密码 ( Not Scored)",
+          "audit": "/bin/ps -ef | grep $apiserverbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--tls-cipher-suites",
+                "compare": {
+                  "op": "eq",
+                  "value": "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑API服务器Pod配置文件$apiserverconf 将--authorization-mode参数设置为包含RBAC的值，例如：\n--tls-cipher-suites=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256\n",
+          "scored": false
+        }
+      ]
+    },
+    {
+      "id": 1.2,
+      "text": "调度程序",
+      "checks": [
+        {
+          "id": "1.2.1",
+          "text": "确保将--profiling参数设置为false (计入分数)",
+          "audit": "/bin/ps -ef | grep $schedulerbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--profiling",
+                "compare": {
+                  "op": "eq",
+                  "value": false
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "编辑主节点上的Scheduler Pod配置文件$schedulerconf文件，设置以下参数\n --profiling=false\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.2.2",
+          "text": "确保--address参数设置为 127.0.0.1 (计入分数)",
+          "audit": "/bin/ps -ef | grep $schedulerbin | grep -v grep",
+          "tests": {
+            "bin_op": "or",
+            "test_items": [
+              {
+                "flag": "--address",
+                "compare": {
+                  "op": "eq",
+                  "value": "127.0.0.1"
+                },
+                "set": true
+              },
+              {
+                "flag": "--address",
+                "set": false
+              }
+            ]
+          },
+          "remediation": "编辑调度程序Pod配置文件$schedulerconf 确保--address参数的值是正确的\n",
+          "scored": true
+        }
+      ]
+    },
+    {
+      "id": 1.3,
+      "text": "控制器管理",
+      "checks": [
+        {
+          "id": "1.3.1",
+          "text": "确保将--terminated-pod-gc-threshold参数设置合适 (计入分数)",
+          "audit": "/bin/ps -ef | grep $controllermanagerbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--terminated-pod-gc-threshold",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑Controller Manager Pod配置文件$controllermanagerconf ，将 --terminated-pod-gc-threshold 设置为适当的阈值，例如:\n--terminated-pod-gc-threshold=10\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.3.2",
+          "text": "确保将--profiling参数设置为false (计入分数)",
+          "audit": "/bin/ps -ef | grep $controllermanagerbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--profiling",
+                "compare": {
+                  "op": "eq",
+                  "value": false
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑Controller Manager Pod配置$controllermanagerconf ，设置以下参数\n--profiling=false\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.3.3",
+          "text": "确保将--use-service-account-credentials参数设置为true (计入分数)",
+          "audit": "/bin/ps -ef | grep $controllermanagerbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--use-service-account-credentials",
+                "compare": {
+                  "op": "noteq",
+                  "value": false
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "编辑Controller Manager Pod配置文件$controllermanagerconf 在主节点上，设置以下参数\n--use-service-account-credentials=true\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.3.4",
+          "text": "确保将--service-account-private-key-file参数设置为适当的值 (计入分数)",
+          "audit": "/bin/ps -ef | grep $controllermanagerbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--service-account-private-key-file",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑Controller Manager Pod配置文件$controllermanagerconf ，将 --service-account-private-key-file 参数设置为服务帐户的私钥文件\n--service-account-private-key-file=<filename>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.3.5",
+          "text": "确保正确设置--root-ca-file参数 (计入分数)",
+          "audit": "/bin/ps -ef | grep $controllermanagerbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--root-ca-file",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑Controller Manager Pod配置文件$controllermanagerconf ，将 --root-ca-file文件 参数设置为证书捆绑。\n--root-ca-file=<path/to/file>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.3.6",
+          "text": "确保将RotateKubeletServerCertificate参数设置为true (计入分数)",
+          "audit": "/bin/ps -ef | grep $controllermanagerbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--feature-gates",
+                "compare": {
+                  "op": "eq",
+                  "value": "RotateKubeletServerCertificate=true"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑Controller Manager Pod配置文件$controllermanagerconf ，将 --feature-gates 参数设置为包含 RotateKubeletServerCertificate=true。\n--feature-gates=RotateKubeletServerCertificate=true\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.3.7",
+          "text": "确保--address参数设置为 127.0.0.1 (计入分数)",
+          "audit": "/bin/ps -ef | grep $controllermanagerbin | grep -v grep",
+          "tests": {
+            "bin_op": "or",
+            "test_items": [
+              {
+                "flag": "--address",
+                "compare": {
+                  "op": "eq",
+                  "value": "127.0.0.1"
+                },
+                "set": true
+              },
+              {
+                "flag": "--address",
+                "set": false
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑Controller Manager Pod配置文件$controllermanagerconf ，确保 --address 参数的值正确\n",
+          "scored": true
+        }
+      ]
+    },
+    {
+      "id": 1.4,
+      "text": "配置文件",
+      "checks": [
+        {
+          "id": "1.4.1",
+          "text": "确保将API server Pod配置文件权限设置为644或更严格",
+          "audit": "/bin/sh -c 'if test -e $apiserverconf; then stat -c permissions=%a $apiserverconf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "permissions",
+                "compare": {
+                  "op": "bitmask",
+                  "value": "644"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如\nchmod 644 $apiserverconf\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.2",
+          "text": "确保将API server pod配置文件所有权设置为root:root (计入分数)",
+          "audit": "/bin/sh -c 'if test -e $apiserverconf; then stat -c %U:%G $apiserverconf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "root:root",
+                "compare": {
+                  "op": "eq",
+                  "value": "root:root"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如\nchown root:root $apiserverconf\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.3",
+          "text": "确保将controller manager配置文件权限设置为644或更严格 (计入分数)",
+          "audit": "/bin/sh -c 'if test -e $controllermanagerconf; then stat -c permissions=%a $controllermanagerconf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "permissions",
+                "compare": {
+                  "op": "bitmask",
+                  "value": "644"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如\nchmod 644 $controllermanagerconf\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.4",
+          "text": "确保将controller manager配置文件所有权设置为root:root (计入分数)",
+          "audit": "/bin/sh -c 'if test -e $controllermanagerconf; then stat -c %U:%G $controllermanagerconf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "root:root",
+                "compare": {
+                  "op": "eq",
+                  "value": "root:root"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如\nchown root:root $controllermanagerconf\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.5",
+          "text": "确保将scheduler pod配置文件权限设置为644或更严格 (计入分数)",
+          "audit": "/bin/sh -c 'if test -e $schedulerconf; then stat -c permissions=%a $schedulerconf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "permissions",
+                "compare": {
+                  "op": "bitmask",
+                  "value": "644"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如\nchmod 644 $schedulerconf\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.6",
+          "text": "确保将scheduler pod 配置文件所有权设置为root:root (计入分数)",
+          "audit": "/bin/sh -c 'if test -e $schedulerconf; then stat -c %U:%G $schedulerconf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "root:root",
+                "compare": {
+                  "op": "eq",
+                  "value": "root:root"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如\nchown root:root $schedulerconf\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.7",
+          "text": "确保将etcd pod配置文件权限设置为644或更严格 (计入分数)",
+          "audit": "/bin/sh -c 'if test -e $etcdconf; then stat -c permissions=%a $etcdconf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "permissions",
+                "compare": {
+                  "op": "bitmask",
+                  "value": "644"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如\nchmod 644 $etcdconf\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.8",
+          "text": "确保将etcd pod 配置文件所有权设置为 root:root(计入分数)",
+          "audit": "/bin/sh -c 'if test -e $etcdconf; then stat -c %U:%G $etcdconf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "root:root",
+                "compare": {
+                  "op": "eq",
+                  "value": "root:root"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如\nchown root:root $etcdconf\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.9",
+          "text": "确保将Container Network Interface文件权限设置为644或更严格 (不计分数)",
+          "audit": "stat -c permissions=%a <path/to/cni/files>",
+          "type": "manual",
+          "remediation": "[手动测试]\n在主节点上，运行以下命令（基于系统上的文件位置）。例如\nchmod 644 <path/to/cni/files>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.10",
+          "text": "确保将Container Network Interfac文件所有权设置为root:root (Not Scored)",
+          "audit": "stat -c %U:%G <path/to/cni/files>",
+          "type": "manual",
+          "remediation": "[手动测试]\n在主节点上，运行以下命令（基于系统上的文件位置）。例如\nchown root:root <path/to/cni/files>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.11",
+          "text": "确保将etcd data文件夹权限设置为700或更严格 (计入分数)",
+          "audit": "ps -ef | grep $etcdbin | grep -- --data-dir | sed 's%.*data-dir[= ]\\([^ ]*\\).*%\\1%' | xargs stat -c permissions=%a",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "permissions",
+                "compare": {
+                  "op": "bitmask",
+                  "value": "700"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在etcd服务器节点上获取etcd数据目录，作为参数传递 --data-dir，从以下命令:\nps -ef | grep $etcdbin\n运行以下命令（基于上面找到的etcd数据目录）。例如，\nchmod 700 /var/lib/etcd\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.12",
+          "text": "确保将etcd data文件夹所有权设置为etcd:etcd (计入分数)",
+          "audit": "ps -ef | grep $etcdbin | grep -- --data-dir | sed 's%.*data-dir[= ]\\([^ ]*\\).*%\\1%' | xargs stat -c %U:%G",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "etcd:etcd",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在etcd服务器节点上获取etcd数据目录，作为参数传递 --data-dir，从以下命令:\nps -ef | grep $etcdbin\n运行以下命令（基于上面找到的etcd数据目录）。例如，\nchown etcd:etcd /var/lib/etcd\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.13",
+          "text": "确保将admin.conf权限设置为644或更严格 (计入分数)",
+          "audit": "/bin/sh -c 'if test -e /etc/kubernetes/admin.conf; then stat -c permissions=%a /etc/kubernetes/admin.conf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "permissions",
+                "compare": {
+                  "op": "bitmask",
+                  "value": "644"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如\nchmod 644 /etc/kubernetes/admin.conf\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.14",
+          "text": "确保将admin.conf文件所有权设置为root:root (计入分数)",
+          "audit": "/bin/sh -c 'if test -e /etc/kubernetes/admin.conf; then stat -c %U:%G /etc/kubernetes/admin.conf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "root:root",
+                "compare": {
+                  "op": "eq",
+                  "value": "root:root"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如\nchown root:root /etc/kubernetes/admin.conf\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.15",
+          "text": "确保将scheduler.conf权限设置为644或更严格 (计入分数)",
+          "audit": "/bin/sh -c 'if test -e /etc/kubernetes/scheduler.conf; then stat -c permissions=%a /etc/kubernetes/scheduler.conf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "permissions",
+                "compare": {
+                  "op": "bitmask",
+                  "value": "644"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如， chmod 644 /etc/kubernetes/scheduler.conf\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.16",
+          "text": "确保将scheduler.conf文件所有权设置为root:root (计入分数)",
+          "audit": "/bin/sh -c 'if test -e /etc/kubernetes/scheduler.conf; then stat -c %U:%G /etc/kubernetes/scheduler.conf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "root:root",
+                "compare": {
+                  "op": "eq",
+                  "value": "root:root"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如， chown root:root /etc/kubernetes/scheduler.conf\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.17",
+          "text": "确保将controller-manager.conf 权限设置为644或更严格 (计入分数)",
+          "audit": "/bin/sh -c 'if test -e /etc/kubernetes/controller-manager.conf; then stat -c permissions=%a /etc/kubernetes/controller-manager.conf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "permissions",
+                "compare": {
+                  "op": "bitmask",
+                  "value": "644"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如， chmod 644 /etc/kubernetes/controller-manager.conf\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.4.18",
+          "text": "确保将controller-manager.conf文件所有权设置为root:root (计入分数)",
+          "audit": "/bin/sh -c 'if test -e /etc/kubernetes/controller-manager.conf; then stat -c %U:%G /etc/kubernetes/controller-manager.conf; fi'",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "root:root",
+                "compare": {
+                  "op": "eq",
+                  "value": "root:root"
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上，运行以下命令（基于系统上的文件位置）。例如， chown root:root /etc/kubernetes/controller-manager.conf\n",
+          "scored": true
+        }
+      ]
+    },
+    {
+      "id": 1.5,
+      "text": "etcd配置",
+      "checks": [
+        {
+          "id": "1.5.1",
+          "text": "确保将--cert-file和--key-file参数设置为适当的值 (计入分数)",
+          "audit": "/bin/ps -ef | grep $etcdbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--cert-file",
+                "set": true
+              },
+              {
+                "flag": "--key-file",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "按照etcd服务文档配置TLS加密。然后，在主节点上编辑etcd Pod配置文件$etcdconf l，设置以下参数 --cert-file=</path/to/ca-file> --key-file=</path/to/key-file>\n--ca-file=</path/to/ca-file>\n--key-file=</path/to/key-file>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.5.2",
+          "text": "确保将--client-cert-auth参数设置为true (计入分数)",
+          "audit": "/bin/ps -ef | grep $etcdbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--client-cert-auth",
+                "compare": {
+                  "op": "noteq",
+                  "value": false
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑etcd Pod配置文件$etcdconf ，设置以下参数\n--client-cert-auth=\"true\"\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.5.3",
+          "text": "确保--auto-tls参数未设置为true (计入分数)",
+          "audit": "/bin/ps -ef | grep $etcdbin | grep -v grep",
+          "tests": {
+            "bin_op": "or",
+            "test_items": [
+              {
+                "flag": "--auto-tls",
+                "set": false
+              },
+              {
+                "flag": "--auto-tls",
+                "compare": {
+                  "op": "eq",
+                  "value": false
+                }
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑etcd Pod配置文件$etcdconf ，删除 --auto-tls 参数或将其设置为 false。\n  --auto-tls=false\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.5.4",
+          "text": "确保正确设置--peer-cert-file和--peer-key-file参数 (计入分数)",
+          "audit": "/bin/ps -ef | grep $etcdbin | grep -v grep",
+          "tests": {
+            "bin_op": "and",
+            "test_items": [
+              {
+                "flag": "--peer-cert-file",
+                "set": true
+              },
+              {
+                "flag": "--peer-key-file",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "按照etcd服务文档根据您的etcd群集配置对等TLS加密。然后，在主节点上编辑etcd Pod配置文件$etcdconf ，设置以下参数\n--peer-client-file=</path/to/peer-cert-file>\n--peer-key-file=</path/to/peer-key-file>\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.5.5",
+          "text": "确保将--peer-client-cert-auth参数设置为true (计入分数)",
+          "audit": "/bin/ps -ef | grep $etcdbin | grep -v grep",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--peer-client-cert-auth",
+                "compare": {
+                  "op": "eq",
+                  "value": true
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑etcd Pod配置文件$etcdconf ，设置以下参数\n--peer-client-cert-auth=true\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.5.6",
+          "text": "确保--peer-auto-tls参数未设置为true (计入分数)",
+          "audit": "/bin/ps -ef | grep $etcdbin | grep -v grep",
+          "tests": {
+            "bin_op": "or",
+            "test_items": [
+              {
+                "flag": "--peer-auto-tls",
+                "set": false
+              },
+              {
+                "flag": "--peer-auto-tls",
+                "compare": {
+                  "op": "eq",
+                  "value": false
+                },
+                "set": true
+              }
+            ]
+          },
+          "remediation": "在主节点上编辑etcd Pod配置文件$etcdconf ，删除 --peer-auto-tls 参数或将其设置为 false。\n--peer-auto-tls=false\n",
+          "scored": true,
+          "isEnable": true
+        },
+        {
+          "id": "1.5.7",
+          "text": "确保将唯一的证书颁发机构用于etcd (Not Scored)",
+          "audit": "/bin/ps -ef | grep $etcdbin | grep -v grep",
+          "type": "manual",
+          "tests": {
+            "test_items": [
+              {
+                "flag": "--trusted-ca-file",
+                "set": true
+              }
+            ]
+          },
+          "remediation": "[手动测试]\n按照etcd文档为etcd服务创建专用的证书颁发机构设置。 然后，在主节点上编辑etcd Pod配置文件$etcdconf ，设置以下参数\n--trusted-ca-file=</path/to/ca-file>\n",
+          "scored": false
+        }
+      ]
+    },
+    {
+      "id": 1.6,
+      "text": "基本安全设置",
+      "checks": [
+        {
+          "id": "1.6.1",
+          "text": "确保仅在需要时使用集群管理员角色 (Not Scored)",
+          "type": "manual",
+          "remediation": "[手动测试]\n移除所有不必要的clusterrolebinding :\nkubectl delete clusterrolebinding [name]\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.6.2",
+          "text": "使用命名空间在资源之间创建管理边界 (Not Scored)",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照文档的说明，根据需要为部署中的对象创建名称空间。\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.6.3",
+          "text": "使用网络策略创建网络分段 (Not Scored)",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照文档根据需要创建NetworkPolicy对象。\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.6.4",
+          "text": "确保在pod定义中将seccomp配置文件设置为docker/default (Not Scored)",
+          "type": "manual",
+          "remediation": "[手动测试]\nSeccomp目前是一个alpha功能。 默认情况下，禁用所有Alpha功能。 因此，您需要通过传递\"--featuregates=AllAlpha=true\"参数来启用apiserver中的alpha功能。\n编辑主节点上的/etc/kubernetes/apiserver文件，将KUBE_API_ARGS参数设置为\"--feature-gates=AllAlpha=true\"\nKUBE_API_ARGS=\"--feature-gates=AllAlpha=true\"\n根据您的系统，重新启动kube-apiserver服务。 例如：\nsystemctl restart kube-apiserver.service\n使用注释在pod定义中启用docker/default seccomp配置文件。 一个例子如下：\napiVersion: v1\nkind: Pod\nmetadata:\n  name: trustworthy-pod\n  annotations:\n    seccomp.security.alpha.kubernetes.io/pod: docker/default\nspec:\n  containers:\n    - name: trustworthy-container\n      image: sotrustworthy:latest\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.6.5",
+          "text": "将Security Context应用于您的Pod和容器 (Not Scored)",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照Kubernetes文档将Security Context应用到您的pod。 有关Security Context的建议列表，您可以参考Docker容器的CIS安全基准。\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.6.6",
+          "text": "使用ImagePolicyWebhook许可控制器配置Image Provenance (Not Scored)",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照Kubernetes文档设置Image Provenance。\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.6.7",
+          "text": "根据需要配置网络策略 (Not Scored)",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照Kubernetes文档根据需要设置网络策略。 例如，您可以通过创建NetworkPolicy为名称空间创建“默认”隔离策略，该策略选择所有Pod但不允许任何流量：\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: default-deny\nspec:\n  podSelector:\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.6.8",
+          "text": "以PSP和RBAC的形式为特权容器设置限制 (Not Scored)",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照Kubernetes文档为您的集群设置PSP和RBAC授权。\n",
+          "scored": false
+        }
+      ]
+    },
+    {
+      "id": 1.7,
+      "text": "POD安全策略",
+      "checks": [
+        {
+          "id": "1.7.1",
+          "text": "不接受特权容器 (Not Scored)",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照Kubernetes文档中的描述创建PSP，确保省略 .spec.privileged 字段或将其设置为false。\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.7.2",
+          "text": "不接受共享主机PID命名空间容器 (计入分数)",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照Kubernetes文档中的描述创建PSP，确保省略 .spec.hostPID 字段或将其设置为false。\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.7.3",
+          "text": "不接受共享主机IPC命名空间容器 (计入分数)",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照Kubernetes文档中的描述创建PSP，确保省略 .spec.hostIPC 字段或将其设置为false。\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.7.4",
+          "text": "不接受共享主机network命名空间容器 (计入分数)",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照Kubernetes文档中的描述创建PSP，确保省略 .spec.hostNetwork 字段或将其设置为false。\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.7.5",
+          "text": "不接受allowPrivilegeEscalation容器 (计入分数)",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照Kubernetes文档中的描述创建PSP，确保省略 .spec.allowPrivilegeEscalation 字段或将其设置为false。\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.7.6",
+          "text": "不接受root用户运行的容器 (Not Scored)",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照Kubernetes文档中的描述创建PSP，确保 .spec.runAsUser.rule 设置为 MustRunAsNonRoot 或 MustRunAs 且 UID 不能为 0.\n",
+          "scored": false,
+          "isEnable": true
+        },
+        {
+          "id": "1.7.7",
+          "text": "不接受requiredDropCapabilities的容器 (Not Scored)",
+          "type": "manual",
+          "remediation": "[手动测试]\n按照Kubernetes文档中的描述创建PSP，确保将 .spec.requiredDropCapabilities 设置为包含 NET_RAW 或 ALL。\n",
+          "scored": false,
+          "isEnable": true
+        }
+      ]
+    }
+  ]
+}
